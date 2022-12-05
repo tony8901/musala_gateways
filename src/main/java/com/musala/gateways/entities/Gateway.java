@@ -1,8 +1,13 @@
 package com.musala.gateways.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "com_musala_gateway")
@@ -14,7 +19,15 @@ public class Gateway {
     private String ip;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "gateway", cascade = CascadeType.ALL)
-    List<Device> devices;
+    private List<Device> devices = new ArrayList<>();
+
+    public List<Device> getDevices() {
+        return devices;
+    }
+
+    public void setDevices(List<Device> devices) {
+        this.devices = devices;
+    }
 
     public Gateway() {
     }
@@ -36,8 +49,5 @@ public class Gateway {
     public String getIp() {
         return ip;
     }
-
-    public List<Device> getDevices() {
-        return devices;
-    }
 }
+

@@ -1,6 +1,9 @@
 package com.musala.gateways.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
@@ -15,18 +18,26 @@ public class Device {
     private boolean status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "serialGateway")
+    @JoinColumn(name = "gateway_serial_number")
+    @JsonIgnore
     private Gateway gateway;
+
+    public Gateway getGateway() {
+        return gateway;
+    }
+
+    public void setGateway(Gateway gateway) {
+        this.gateway = gateway;
+    }
 
     public Device() {
     }
 
-    public Device(Long UID, String vendor, LocalDate dateCreated, boolean status, Gateway gateway) {
+    public Device(Long UID, String vendor, LocalDate dateCreated, boolean status) {
         this.UID = UID;
         this.vendor = vendor;
         this.dateCreated = dateCreated;
         this.status = status;
-        this.gateway = gateway;
     }
 
     public Long getUID() {
@@ -43,6 +54,22 @@ public class Device {
 
     public boolean isStatus() {
         return status;
+    }
+
+    public void setUID(Long UID) {
+        this.UID = UID;
+    }
+
+    public void setVendor(String vendor) {
+        this.vendor = vendor;
+    }
+
+    public void setDateCreated(LocalDate dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
 }
