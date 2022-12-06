@@ -56,14 +56,14 @@ public class GatewayService {
         return ResponseEntity.noContent().build();
     }
 
-//    public ResponseEntity<Gateway> deleteDevice(String serialNumber, Long uid){
-//        if(!gatewayRepository.existsById(serialNumber)) { throw new EntityNotFoundException("Gateway not found with Serial Number: " + serialNumber); }
-//        if(!deviceRepository.existsById(uid)) { throw new EntityNotFoundException("Device not found with UID: "+uid); }
-//
-//        deviceRepository.deleteById(uid);
-//        Optional<Gateway> gateway = gatewayRepository.findById(serialNumber);
-//        return ResponseEntity.ok(gateway.get());
-//    }
+    public ResponseEntity<Gateway> deleteDevice(String serialNumber, Long uid){
+        if(!gatewayRepository.existsById(serialNumber)) { throw new EntityNotFoundException("Gateway not found with Serial Number: " + serialNumber); }
+        if(!deviceRepository.existsById(uid)) { throw new EntityNotFoundException("Device not found with UID: "+uid); }
+
+        deviceRepository.deleteById(uid);
+        Optional<Gateway> gateway = gatewayRepository.findById(serialNumber);
+        return ResponseEntity.ok(gateway.get());
+    }
 
     public boolean ipValidating(String ip){
         boolean b = true;

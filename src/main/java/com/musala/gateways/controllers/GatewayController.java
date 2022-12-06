@@ -46,9 +46,9 @@ public class GatewayController {
         return gatewayService.delete(serialNumber);
     }
 
-//    @DeleteMapping("/{serialNumber}/devices/{uid}")
-//    public ResponseEntity<Gateway> deleteDevice(@PathVariable String serialNumber, @PathVariable Long uid){
-//        return gatewayService.deleteDevice(serialNumber,uid);
-//    }
+    @DeleteMapping("/{serialNumber}/devices/{uid}")
+    public ResponseEntity<Gateway> deleteDevice(@PathVariable String serialNumber, @PathVariable Long uid){
+        return gatewayService.deleteDevice(serialNumber,uid);
+    }
 
 }

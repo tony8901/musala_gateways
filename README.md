@@ -38,6 +38,9 @@ Features:
 * Delete a gateway (DELETE method)
   (http://host:port/api/gateways/{SerialNumber}).
 
+* Delete a device from gateway (DELETE method)
+  (http://host:port/api/gateways/{SerialNumber}/devices/{UID}).
+
 * Find all devices (GET method)
   (http://host:port/api/devices).
 
@@ -51,3 +54,5 @@ Features:
   (http://host:port/api/gateways/{UID}).
 
 > The test data for Postman is in the "postman/postman_collection.json" file.
+
+> The H2 database files are located in the "musala_h2_database" directory.
