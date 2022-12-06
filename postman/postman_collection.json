@@ -81,7 +81,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"serialNumber\": \"serial1346\",\r\n    \"name\": \"gateway1\",\r\n    \"ip\": \"192.168.1.1\",\r\n    \"devices\": []\r\n}",
+					"raw": "{\r\n    \"serialNumber\": \"serial1346\",\r\n    \"name\": \"gateway1346\",\r\n    \"ip\": \"192.168.1.1\",\r\n    \"devices\": []\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -144,7 +144,7 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8080/api/gateways/serial1346/1235687",
+					"raw": "http://127.0.0.1:8080/api/gateways/serial1/18",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -193,7 +193,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8080/api/devices/123",
+					"raw": "http://127.0.0.1:8080/api/devices/1",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -217,7 +217,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8080/api/gateways/serial1/devices/124",
+					"raw": "http://127.0.0.1:8080/api/gateways/serial1/devices/1",
 					"protocol": "http",
 					"host": [
 						"127",
