@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Array;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +37,7 @@ public class GatewayService {
     public ResponseEntity<Gateway> save(Gateway gateway) {
         if (ipValidating(gateway.getIp())) {
             Optional<Gateway> optionalGateway = Optional.of(gatewayRepository.save(gateway));
-            return optionalGateway.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> ResponseEntity.badRequest().build());
+            return optionalGateway.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED)).orElseGet(() -> ResponseEntity.badRequest().build());
         }
         return ResponseEntity.badRequest().build();
     }
@@ -44,7 +45,7 @@ public class GatewayService {
     public ResponseEntity<Gateway> addDevice(String serialNumber, Long uid) {
         Gateway gateway = gatewayRepository.findById(serialNumber).orElseThrow(() -> new EntityNotFoundException("Gateway not found with Serial Number: " + serialNumber));
         Device device = deviceRepository.findById(uid).orElseThrow(() -> new EntityNotFoundException("Device not found with UID: " + uid));
-        if(sizeList(gateway.getDevices())) {
+        if(gateway.getDevices().size() < 10) {
             device.setGateway(gateway);
             deviceRepository.save(device);
             return ResponseEntity.ok().build();
@@ -74,22 +75,24 @@ public class GatewayService {
         return ResponseEntity.ok(gateway.get());
     }
 
-    public boolean ipValidating(String ip) {
+    public boolean ipValidating(String ip){
         boolean b = true;
         String[] strings = ip.split("\\.");
         if (strings.length != 4) {
             b = false;
         }
-        for (String s : strings) {
-            int i = Integer.parseInt(s);
-            if (i < 0 || i > 255) {
-                b = false;
+        try {
+            for (String s : strings) {
+                int i = Integer.parseInt(s);
+                if (i < 0 || i > 255) {
+                    b = false;
+                }
             }
+        } catch (NumberFormatException e){
+            ResponseEntity.badRequest().build();
         }
+
         return b;
     }
 
-    public boolean sizeList(List<Device> devList) {
-        return devList.size() < 10;
-    }
 }

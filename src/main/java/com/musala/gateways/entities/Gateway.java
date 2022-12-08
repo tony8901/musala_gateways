@@ -45,5 +45,17 @@ public class Gateway {
     public String getIp() {
         return ip;
     }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
 }
 
