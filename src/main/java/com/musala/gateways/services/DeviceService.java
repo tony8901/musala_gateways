@@ -35,7 +35,9 @@ public class DeviceService {
     }
 
     public ResponseEntity<HttpStatus> delete(Long uid){
-        if(!deviceRepository.existsById(uid)) { throw new EntityNotFoundException("Device not found with UID: "+uid); }
+        if(!deviceRepository.existsById(uid)) {
+            throw new EntityNotFoundException("Device not found with UID: "+uid);
+        }
 
         deviceRepository.deleteById(uid);
         return ResponseEntity.noContent().build();
