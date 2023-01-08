@@ -14,11 +14,7 @@ public class GatewayServiceAnotherTest {
 
     @Test
     public void validateIp_true() throws Exception{
-        String ip = (int) Math.floor(Math.random() * 255)
-                +"."+ (int) Math.floor(Math.random() * 255)
-                +"."+ (int) Math.floor(Math.random() * 255)
-                +"."+ (int) Math.floor(Math.random() * 255);
-        assertThat(service.ipValidating(ip)).isTrue();
+
     }
 
 

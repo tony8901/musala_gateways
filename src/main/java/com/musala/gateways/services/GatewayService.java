@@ -4,8 +4,10 @@ import com.musala.gateways.entities.Device;
 import com.musala.gateways.entities.Gateway;
 import com.musala.gateways.repositories.DeviceRepository;
 import com.musala.gateways.repositories.GatewayRepository;
+import com.musala.gateways.utils.Util;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +37,8 @@ public class GatewayService {
     }
 
     public ResponseEntity<Gateway> save(Gateway gateway) {
-        if (ipValidating(gateway.getIp())) {
+        Util util = new Util();
+        if (util.ipValidating(gateway.getIp())) {
             Optional<Gateway> optionalGateway = Optional.of(gatewayRepository.save(gateway));
             return optionalGateway.map(value -> new ResponseEntity<>(value, HttpStatus.CREATED)).orElseGet(() -> ResponseEntity.badRequest().build());
         }
@@ -74,25 +77,4 @@ public class GatewayService {
         Optional<Gateway> gateway = gatewayRepository.findById(serialNumber);
         return ResponseEntity.ok(gateway.get());
     }
-
-    public boolean ipValidating(String ip){
-        boolean b = true;
-        String[] strings = ip.split("\\.");
-        if (strings.length != 4) {
-            b = false;
-        }
-        try {
-            for (String s : strings) {
-                int i = Integer.parseInt(s);
-                if (i < 0 || i > 255) {
-                    b = false;
-                }
-            }
-        } catch (NumberFormatException e){
-            ResponseEntity.badRequest().build();
-        }
-
-        return b;
-    }
-
 }
