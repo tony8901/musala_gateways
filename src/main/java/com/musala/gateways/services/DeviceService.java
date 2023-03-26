@@ -2,12 +2,10 @@ package com.musala.gateways.services;
 
 import com.musala.gateways.entities.Device;
 import com.musala.gateways.repositories.DeviceRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,28 +17,30 @@ public class DeviceService {
         this.deviceRepository = deviceRepository;
     }
 
-    public ResponseEntity<List<Device>> findAll(){
-        Optional<List<Device>> optionalDevices = Optional.of(deviceRepository.findAll());
-        return optionalDevices.map(devices -> new ResponseEntity<>(devices, HttpStatus.OK)).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<?> findAll(){
+        Optional<Object> optionalDevices = Optional.of(deviceRepository.findAll());
+        return optionalDevices.map(devices -> new ResponseEntity<>(devices, HttpStatus.OK)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Devices not founds!"));
     }
 
-    public ResponseEntity<Device> findById(Long uid){
-        Optional<Device> device = deviceRepository.findById(uid);
-        return device.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<?> findById(Long uid){
+        if(deviceRepository.existsById(uid)){
+            return ResponseEntity.status(HttpStatus.OK).body(deviceRepository.findById(uid));
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Device not found with the uid: "+uid+"!");
+        }
     }
 
-    public ResponseEntity<Device> save(Device device){
-        Optional<Device> optionalDevices = Optional.of(deviceRepository.save(device));
-        return optionalDevices.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> ResponseEntity.badRequest().build());
+    public ResponseEntity<?> save(Device device){
+        return ResponseEntity.status(HttpStatus.OK).body(deviceRepository.save(device));
     }
 
-    public ResponseEntity<HttpStatus> delete(Long uid){
+    public ResponseEntity<?> delete(Long uid){
         if(!deviceRepository.existsById(uid)) {
-            throw new EntityNotFoundException("Device not found with UID: "+uid);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Device not found with the uid: "+uid+"!");
         }
 
         deviceRepository.deleteById(uid);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 
 
