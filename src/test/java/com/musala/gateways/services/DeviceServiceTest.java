@@ -1,88 +1,95 @@
 package com.musala.gateways.services;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.musala.gateways.controllers.DeviceController;
 import com.musala.gateways.entities.Device;
+import com.musala.gateways.repositories.DeviceRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-@WebMvcTest(DeviceController.class)
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+/**
+ * Clase generada por IA
+ */
+
 public class DeviceServiceTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    private DeviceService deviceService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @MockBean
-    private DeviceService service;
-
-    private Device device;
-
-    private String url = "http://127.0.0.1:8080/api/devices";
+    @Mock
+    private DeviceRepository deviceRepository;
 
     @BeforeEach
-    public void init(){
-        LocalDate date = LocalDate.of(2022,12,1);
-        device = new Device(1L,"mockitoVendor", date, true);
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+        deviceService = new DeviceService(deviceRepository);
     }
 
     @Test
-    public void findAllDevices() throws Exception{
-        this.mockMvc.perform(get(url)).andExpect(status().isOk());
+    public void testFindAll() {
+        List<Device> devices = new ArrayList<>();
+        devices.add(new Device());
+        devices.add(new Device());
+
+        when(deviceRepository.findAll()).thenReturn(devices);
+
+        ResponseEntity<?> response = deviceService.findAll();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(devices, response.getBody());
     }
 
     @Test
-    public void findByIdDevice() throws Exception{
-        when(service.findById(device.getUID())).thenReturn(ResponseEntity.ok(device));
+    public void testFindById() {
+        Long uid = 1L;
+        Device device = new Device();
+        device.setId(uid);
 
-        this.mockMvc.perform(get(url+"/{uid}", device.getUID()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.uid", is(device.getUID().intValue())))
-                .andExpect(jsonPath("$.vendor", is(device.getVendor())))
-                .andExpect(jsonPath("$.dateCreated", is(device.getDateCreated().toString())))
-                .andExpect(jsonPath("$.status", is(device.isStatus())));
+        when(deviceRepository.existsById(uid)).thenReturn(true);
+        when(deviceRepository.findById(uid)).thenReturn(Optional.of(device));
+
+        ResponseEntity<?> response = deviceService.findById(uid);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(Optional.of(device), response.getBody());
+
     }
 
     @Test
-    public void saveDevice() throws Exception{
-        when(service.save(any(Device.class))).thenReturn(new ResponseEntity<>(device, HttpStatus.CREATED));
+    public void testSave() {
+        Device device = new Device();
 
-        this.mockMvc.perform(post(url)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(device)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.uid", is(device.getUID().intValue())))
-                .andExpect(jsonPath("$.vendor", is(device.getVendor())))
-                .andExpect(jsonPath("$.dateCreated", is(device.getDateCreated().toString())))
-                .andExpect(jsonPath("$.status", is(device.isStatus())));
+        when(deviceRepository.save(device)).thenReturn(device);
+
+        ResponseEntity<?> response = deviceService.save(device);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(device, response.getBody());
     }
 
     @Test
-    public void deleteDevice() throws Exception{
-        when(service.delete(device.getUID())).thenReturn(ResponseEntity.noContent().build());
+    public void testDeleteDeviceExists() {
+        Long uid = 1L;
 
-        this.mockMvc.perform(delete(url+"/{uid}", device.getUID()))
-                .andExpect(status().isNoContent());
+        when(deviceRepository.existsById(uid)).thenReturn(true);
+
+        ResponseEntity<?> response = deviceService.delete(uid);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
+    @Test
+    public void testDeleteDeviceNotExists() {
+        Long uid = 1L;
+
+        when(deviceRepository.existsById(uid)).thenReturn(false);
+
+        ResponseEntity<?> response = deviceService.delete(uid);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Device not found with the uid: " + uid + "!", response.getBody());
+    }
 }

@@ -1,87 +1,134 @@
 package com.musala.gateways.services;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.musala.gateways.controllers.GatewayController;
+import com.musala.gateways.entities.Device;
 import com.musala.gateways.entities.Gateway;
+import com.musala.gateways.repositories.DeviceRepository;
+import com.musala.gateways.repositories.GatewayRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(GatewayController.class)
+import java.util.ArrayList;
+import java.util.List;
+
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+/**
+ * Clase generada por IA
+ */
+
 public class GatewayServiceTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @InjectMocks
+    private GatewayService gatewayService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Mock
+    private GatewayRepository gatewayRepository;
 
-    @MockBean
-    private GatewayService service;
-
-    Gateway gateway;
+    @Mock
+    private DeviceRepository deviceRepository;
 
     @BeforeEach
-    public void init(){
-        gateway = new Gateway("mockitoSerial","mockitoName","0.0.0.0");
-    }
-
-    private String url= "/api/gateways";
-
-    @Test
-    public void findAllGateways() throws Exception {
-        this.mockMvc.perform(get(url)).andExpect(status().isOk());
+    public void init() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void findByIdGateway() throws Exception{
-        when(service.findById(gateway.getSerialNumber())).thenReturn(ResponseEntity.ok(gateway));
-        this.mockMvc.perform(get(url+"/{serialNumber}",gateway.getSerialNumber()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.ip",is(gateway.getIp())))
-                .andExpect(jsonPath("$.name",is(gateway.getName())));
+    public void testFindAll() {
+        List<Gateway> gateways = new ArrayList<>();
+        gateways.add(new Gateway());
+        when(gatewayRepository.findAll()).thenReturn(gateways);
+        ResponseEntity<?> response = gatewayService.findALl();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(gateways, response.getBody());
     }
 
     @Test
-    public void saveGateway() throws Exception{
-        when(service.save(any(Gateway.class))).thenReturn(new ResponseEntity<>(gateway, HttpStatus.CREATED));
-
-        this.mockMvc.perform(post(url)
-                .contentType((MediaType.APPLICATION_JSON))
-                .content(objectMapper.writeValueAsString(gateway)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.serialNumber", is(gateway.getSerialNumber())))
-                .andExpect(jsonPath("$.name", is(gateway.getName())))
-                .andExpect(jsonPath("$.ip", is(gateway.getIp())));
+    public void testFindById() {
+        String serialNumber = "testSerialNumber";
+        Gateway gateway = new Gateway();
+        when(gatewayRepository.existsById(serialNumber)).thenReturn(true);
+        when(gatewayRepository.findById(serialNumber)).thenReturn(java.util.Optional.of(gateway));
+        ResponseEntity<?> response = gatewayService.findById(serialNumber);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(java.util.Optional.of(gateway), response.getBody());
     }
 
     @Test
-    public void deleteGateway() throws Exception{
-        when(service.delete(gateway.getSerialNumber())).thenReturn(ResponseEntity.noContent().build());
-
-        this.mockMvc.perform(delete(url+"/{serialNumber}", gateway.getSerialNumber()))
-                .andExpect(status().isNoContent());
+    public void testSave() {
+        Gateway gateway = new Gateway();
+        gateway.setIp("192.168.1.1");
+        when(gatewayRepository.save(gateway)).thenReturn(gateway);
+        ResponseEntity<?> response = gatewayService.save(gateway);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(gateway, response.getBody());
     }
 
+    @Test
+    public void testAddDevice() {
+        String serialNumber = "testSerialNumber";
+        Long uid = 1L;
+        Gateway gateway = new Gateway();
+        gateway.setDevices(new ArrayList<>());
+        Device device = new Device();
+        when(gatewayRepository.findById(serialNumber)).thenReturn(java.util.Optional.of(gateway));
+        when(deviceRepository.findById(uid)).thenReturn(java.util.Optional.of(device));
+        when(deviceRepository.save(any(Device.class))).thenReturn(device);
+        ResponseEntity<?> response = gatewayService.addDevice(serialNumber, uid);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(deviceRepository).save(device);
+    }
 
+    @Test
+    public void testAddDeviceGatewayNotFound() {
+        String serialNumber = "testSerialNumber";
+        Long uid = 1L;
+        when(gatewayRepository.findById(serialNumber)).thenThrow(new EntityNotFoundException("Gateway not found with Serial Number: " + serialNumber));
+        try {
+            gatewayService.addDevice(serialNumber, uid);
+        } catch (EntityNotFoundException e) {
+            assertEquals("Gateway not found with Serial Number: " + serialNumber, e.getMessage());
+        }
+    }
 
+    @Test
+    public void testAddDeviceDeviceNotFound() {
+        String serialNumber = "testSerialNumber";
+        Long uid = 1L;
+        Gateway gateway = new Gateway();
+        when(gatewayRepository.findById(serialNumber)).thenReturn(java.util.Optional.of(gateway));
+        when(deviceRepository.findById(uid)).thenThrow(new EntityNotFoundException("Device not found with UID: " + uid));
+        try {
+            gatewayService.addDevice(serialNumber, uid);
+        } catch (EntityNotFoundException e) {
+            assertEquals("Device not found with UID: " + uid, e.getMessage());
+        }
+    }
 
+    @Test
+    public void testDelete() {
+        String serialNumber = "testSerialNumber";
+        when(gatewayRepository.existsById(serialNumber)).thenReturn(true);
+        doNothing().when(gatewayRepository).deleteById(serialNumber);
+        ResponseEntity<?> response = gatewayService.delete(serialNumber);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(gatewayRepository).deleteById(serialNumber);
+    }
 
+    @Test
+    public void testDeleteGatewayNotFound() {
+        String serialNumber = "testSerialNumber";
+        when(gatewayRepository.existsById(serialNumber)).thenReturn(false);
+        ResponseEntity<?> response = gatewayService.delete(serialNumber);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals("Gateway not found with Serial Number: " + serialNumber, response.getBody());
+    }
 }

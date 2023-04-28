@@ -6,12 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "com_musala_gateway")
+@Table(name = "MUSALA_GATEWAYS")
 public class Gateway {
 
     @Id
-    private String serialNumber;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String ip;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "gateway", cascade = CascadeType.ALL)
@@ -28,14 +32,14 @@ public class Gateway {
     public Gateway() {
     }
 
-    public Gateway(String serialNumber, String name, String ip) {
-        this.serialNumber = serialNumber;
+    public Gateway(Long id, String name, String ip) {
+        this.id = id;
         this.name = name;
         this.ip = ip;
     }
 
-    public String getSerialNumber() {
-        return serialNumber;
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
@@ -46,8 +50,8 @@ public class Gateway {
         return ip;
     }
 
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setName(String name) {
@@ -56,6 +60,15 @@ public class Gateway {
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    @Override
+    public String toString() {
+        return "Gateway{" +
+                "gateway_id='" + id + '\'' +
+                ", gateway_name='" + name + '\'' +
+                ", gateway_ip='" + ip + '\'' +
+                '}';
     }
 }
 

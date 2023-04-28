@@ -6,17 +6,22 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "com_musala_device")
+@Table(name = "MUSALA_DEVICES")
 public class Device {
 
     @Id
-    private Long UID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
+    @Column(nullable = false)
     private String vendor;
+    @Column(nullable = false)
     private LocalDate dateCreated;
+    @Column(nullable = false)
     private boolean status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gateway_serial_number")
+    @JoinColumn(name = "gateway.id")
     @JsonIgnore
     private Gateway gateway;
 
@@ -31,15 +36,15 @@ public class Device {
     public Device() {
     }
 
-    public Device(Long UID, String vendor, LocalDate dateCreated, boolean status) {
-        this.UID = UID;
+    public Device(Long id, String vendor, LocalDate dateCreated, boolean status) {
+        this.id = id;
         this.vendor = vendor;
         this.dateCreated = dateCreated;
         this.status = status;
     }
 
-    public Long getUID() {
-        return UID;
+    public Long getId() {
+        return id;
     }
 
     public String getVendor() {
@@ -54,8 +59,8 @@ public class Device {
         return status;
     }
 
-    public void setUID(Long UID) {
-        this.UID = UID;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setVendor(String vendor) {
@@ -70,4 +75,13 @@ public class Device {
         this.status = status;
     }
 
+    @Override
+    public String toString() {
+        return "Device{" +
+                "device_id=" + id +
+                ", device_vendor='" + vendor + '\'' +
+                ", device_dateCreated=" + dateCreated +
+                ", device_status=" + status +
+                '}';
+    }
 }

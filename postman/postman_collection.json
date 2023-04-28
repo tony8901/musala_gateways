@@ -1,5 +1,6 @@
 {
 	"info": {
+		"_postman_id": "0ae8f9d8-664e-4e65-b995-e08cd36b6410",
 		"name": "Musala Gateways",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -7,6 +8,16 @@
 		{
 			"name": "Gateways FindAll",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b255IiwiaWF0IjoxNjc5ODE1Mzk0LCJleHAiOjE2Nzk5MDE3OTR9.R8j5ZWV5S2VHrAqH8wuackFsWJskduaTDFyx0oLLH6APiFqtU3dgeaBfw4JSijr1NVVl3i1-ds-UBNrPnSnScA",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -30,6 +41,16 @@
 		{
 			"name": "Devices FindAll",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b255IiwiaWF0IjoxNjc5ODEzMDk0LCJleHAiOjE2Nzk4OTk0OTR9.dHuxzCK0GOQRWKG0NNCE-7mrY6No6_ORzqi8t-a98x-ObU3umjCwM4C4BgExVVRg1fOjERbGW8GIxJFfqkmdAg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -53,6 +74,16 @@
 		{
 			"name": "Gateways FindById",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b255IiwiaWF0IjoxNjc5ODA5MjU5LCJleHAiOjE2Nzk4OTU2NTl9.n1wndOZx-O_osRmdHBaNgZ3oC8Xm_yKI7DFlms4QnaXcNMxhKemLn_LMnP_p8BLVH0nv9iNMMYxsAJxTkVvSRg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -77,11 +108,21 @@
 		{
 			"name": "Gateways Save",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b255IiwiaWF0IjoxNjc5ODEzMDk0LCJleHAiOjE2Nzk4OTk0OTR9.dHuxzCK0GOQRWKG0NNCE-7mrY6No6_ORzqi8t-a98x-ObU3umjCwM4C4BgExVVRg1fOjERbGW8GIxJFfqkmdAg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"serialNumber\": \"serial1346\",\r\n    \"name\": \"gateway1346\",\r\n    \"ip\": \"192.168.1.1\",\r\n    \"devices\": []\r\n}",
+					"raw": "{\r\n    \"gateway_id\": \"serial1346\",\r\n    \"gateway_name\": \"gateway1\",\r\n    \"gateway_ip\": \"192.168.1.1\",\r\n    \"devices\": []\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -109,11 +150,21 @@
 		{
 			"name": "Devices Save",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b255IiwiaWF0IjoxNjc5ODEzMDk0LCJleHAiOjE2Nzk4OTk0OTR9.dHuxzCK0GOQRWKG0NNCE-7mrY6No6_ORzqi8t-a98x-ObU3umjCwM4C4BgExVVRg1fOjERbGW8GIxJFfqkmdAg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"vendor\": \"alguien\",\r\n    \"dateCreated\": \"2022-12-03\",\r\n    \"status\": true,\r\n    \"uid\": 1235687\r\n}",
+					"raw": "{\r\n    \"device_vendor\": \"alguien\",\r\n    \"device_date_created\": \"2022-12-03\",\r\n    \"device_status\": true,\r\n    \"device_id\": 1235687\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -141,10 +192,20 @@
 		{
 			"name": "Add Device to Gateway",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b255IiwiaWF0IjoxNjc5ODEzMDk0LCJleHAiOjE2Nzk4OTk0OTR9.dHuxzCK0GOQRWKG0NNCE-7mrY6No6_ORzqi8t-a98x-ObU3umjCwM4C4BgExVVRg1fOjERbGW8GIxJFfqkmdAg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8080/api/gateways/serial1/18",
+					"raw": "http://127.0.0.1:8080/api/gateways/serial1346/1235687",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -166,10 +227,20 @@
 		{
 			"name": "Delete Gateway",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b255IiwiaWF0IjoxNjc5ODEzMDk0LCJleHAiOjE2Nzk4OTk0OTR9.dHuxzCK0GOQRWKG0NNCE-7mrY6No6_ORzqi8t-a98x-ObU3umjCwM4C4BgExVVRg1fOjERbGW8GIxJFfqkmdAg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8080/api/gateways/serial12",
+					"raw": "http://127.0.0.1:8080/api/gateways/serial1346",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -181,7 +252,7 @@
 					"path": [
 						"api",
 						"gateways",
-						"serial12"
+						"serial1346"
 					]
 				}
 			},
@@ -190,10 +261,20 @@
 		{
 			"name": "Delete Device",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0b255IiwiaWF0IjoxNjc5ODEzMDk0LCJleHAiOjE2Nzk4OTk0OTR9.dHuxzCK0GOQRWKG0NNCE-7mrY6No6_ORzqi8t-a98x-ObU3umjCwM4C4BgExVVRg1fOjERbGW8GIxJFfqkmdAg",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8080/api/devices/1",
+					"raw": "http://127.0.0.1:8080/api/devices/1235687",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -205,7 +286,7 @@
 					"path": [
 						"api",
 						"devices",
-						"123"
+						"1235687"
 					]
 				}
 			},
@@ -217,7 +298,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://127.0.0.1:8080/api/gateways/serial1/devices/1",
+					"raw": "http://127.0.0.1:8080/api/gateways/serial1/devices/124",
 					"protocol": "http",
 					"host": [
 						"127",
@@ -232,6 +313,72 @@
 						"serial1",
 						"devices",
 						"124"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"tony\",\r\n    \"password\":\"tony\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"tony\",\r\n    \"email\": \"tony@mail.com\",\r\n    \"password\":\"tony\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"register"
 					]
 				}
 			},

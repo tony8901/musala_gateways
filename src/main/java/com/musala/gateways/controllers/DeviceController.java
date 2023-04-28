@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 
 /**
@@ -23,23 +22,39 @@ public class DeviceController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Device>> findAll(){
-        return deviceService.findAll();
+    public ResponseEntity<?> findAll(){
+        try {
+            return deviceService.findAll();
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Something is wrong: "+e.getMessage());
+        }
     }
 
     @GetMapping("/{uid}")
-    public ResponseEntity<Device> findById(@PathVariable Long uid){
-        return deviceService.findById(uid);
+    public ResponseEntity<?> findById(@PathVariable Long uid){
+        try {
+            return deviceService.findById(uid);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Something is wrong: "+e.getMessage());
+        }
     }
 
     @PostMapping
-    public ResponseEntity<Device> save(@RequestBody Device device){
-        return deviceService.save(device);
+    public ResponseEntity<?> save(@RequestBody Device device){
+        try {
+            return deviceService.save(device);
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something is wrong: "+e.getMessage());
+        }
     }
 
     @DeleteMapping("/{uid}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable Long uid){
-        return deviceService.delete(uid);
+    public ResponseEntity<?> delete(@PathVariable Long uid){
+       try {
+           return deviceService.delete(uid);
+       }catch (Exception e){
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Something is wrong: "+e.getMessage());
+       }
     }
 
 }
