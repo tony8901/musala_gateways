@@ -1,5 +1,6 @@
 package com.musala.gateways.security.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,6 +15,7 @@ public class User {
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
     public User() {

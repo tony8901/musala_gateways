@@ -59,6 +59,17 @@ public class GatewayController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Something is wrong: "+e.getMessage());
         }
     }
+    @DeleteMapping("/{gatewayId}/{deviceId}")
+    public ResponseEntity<?> deleteDevice(@PathVariable String gatewayId, @PathVariable Long deviceId){
+        try{
+            return gatewayService.deleteDevice(gatewayId, deviceId);
+        } catch (EntityNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error getting the data: "+e.getMessage());
+        }
+        catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Something is wrong: "+e.getMessage());
+        }
+    }
 
     @DeleteMapping("/{serialNumber}")
     public ResponseEntity<?> delete(@PathVariable String serialNumber){

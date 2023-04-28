@@ -10,63 +10,64 @@ import java.util.List;
 public class Gateway {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private String gateway_id;
+    private Long id;
     @Column(nullable = false)
-    private String gateway_name;
+    private String name;
     @Column(nullable = false)
-    private String gateway_ip;
+    private String ip;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "device_gateway", cascade = CascadeType.ALL)
-    private List<Device> gateway_devices = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "gateway", cascade = CascadeType.ALL)
+    private List<Device> devices = new ArrayList<>();
 
-    public List<Device> getGateway_devices() {
-        return gateway_devices;
+    public List<Device> getDevices() {
+        return devices;
     }
 
-    public void setGateway_devices(List<Device> gateway_devices) {
-        this.gateway_devices = gateway_devices;
+    public void setDevices(List<Device> devices) {
+        this.devices = devices;
     }
 
     public Gateway() {
     }
 
-    public Gateway(String gateway_id, String gateway_name, String gateway_ip) {
-        this.gateway_id = gateway_id;
-        this.gateway_name = gateway_name;
-        this.gateway_ip = gateway_ip;
+    public Gateway(Long id, String name, String ip) {
+        this.id = id;
+        this.name = name;
+        this.ip = ip;
     }
 
-    public String getGateway_id() {
-        return gateway_id;
+    public Long getId() {
+        return id;
     }
 
-    public String getGateway_name() {
-        return gateway_name;
+    public String getName() {
+        return name;
     }
 
-    public String getGateway_ip() {
-        return gateway_ip;
+    public String getIp() {
+        return ip;
     }
 
-    public void setGateway_id(String gateway_id) {
-        this.gateway_id = gateway_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setGateway_name(String gateway_name) {
-        this.gateway_name = gateway_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setGateway_ip(String gateway_ip) {
-        this.gateway_ip = gateway_ip;
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
     @Override
     public String toString() {
         return "Gateway{" +
-                "gateway_id='" + gateway_id + '\'' +
-                ", gateway_name='" + gateway_name + '\'' +
-                ", gateway_ip='" + gateway_ip + '\'' +
+                "gateway_id='" + id + '\'' +
+                ", gateway_name='" + name + '\'' +
+                ", gateway_ip='" + ip + '\'' +
                 '}';
     }
 }

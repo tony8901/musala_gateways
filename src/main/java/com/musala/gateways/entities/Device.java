@@ -10,77 +10,78 @@ import java.time.LocalDate;
 public class Device {
 
     @Id
-    @Column(name = "device_id", nullable = false)
-    private Long device_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private String device_vendor;
+    private Long id;
     @Column(nullable = false)
-    private LocalDate device_date_created;
+    private String vendor;
     @Column(nullable = false)
-    private boolean device_status;
+    private LocalDate dateCreated;
+    @Column(nullable = false)
+    private boolean status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "gateway_id")
+    @JoinColumn(name = "gateway.id")
     @JsonIgnore
-    private Gateway device_gateway;
+    private Gateway gateway;
 
-    public Gateway getDevice_gateway() {
-        return device_gateway;
+    public Gateway getGateway() {
+        return gateway;
     }
 
-    public void setDevice_gateway(Gateway device_gateway) {
-        this.device_gateway = device_gateway;
+    public void setGateway(Gateway gateway) {
+        this.gateway = gateway;
     }
 
     public Device() {
     }
 
-    public Device(Long device_id, String device_vendor, LocalDate device_date_created, boolean device_status) {
-        this.device_id = device_id;
-        this.device_vendor = device_vendor;
-        this.device_date_created = device_date_created;
-        this.device_status = device_status;
+    public Device(Long id, String vendor, LocalDate dateCreated, boolean status) {
+        this.id = id;
+        this.vendor = vendor;
+        this.dateCreated = dateCreated;
+        this.status = status;
     }
 
-    public Long getDevice_id() {
-        return device_id;
+    public Long getId() {
+        return id;
     }
 
-    public String getDevice_vendor() {
-        return device_vendor;
+    public String getVendor() {
+        return vendor;
     }
 
-    public LocalDate getDevice_date_created() {
-        return device_date_created;
+    public LocalDate getDateCreated() {
+        return dateCreated;
     }
 
-    public boolean isDevice_status() {
-        return device_status;
+    public boolean isStatus() {
+        return status;
     }
 
-    public void setDevice_id(Long device_id) {
-        this.device_id = device_id;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setDevice_vendor(String device_vendor) {
-        this.device_vendor = device_vendor;
+    public void setVendor(String vendor) {
+        this.vendor = vendor;
     }
 
-    public void setDevice_date_created(LocalDate device_date_created) {
-        this.device_date_created = device_date_created;
+    public void setDateCreated(LocalDate dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
-    public void setDevice_status(boolean device_status) {
-        this.device_status = device_status;
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
         return "Device{" +
-                "device_id=" + device_id +
-                ", device_vendor='" + device_vendor + '\'' +
-                ", device_dateCreated=" + device_date_created +
-                ", device_status=" + device_status +
+                "device_id=" + id +
+                ", device_vendor='" + vendor + '\'' +
+                ", device_dateCreated=" + dateCreated +
+                ", device_status=" + status +
                 '}';
     }
 }

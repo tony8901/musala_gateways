@@ -40,7 +40,7 @@ public class DeviceService {
         }
 
         deviceRepository.deleteById(uid);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("Device deleted! :)");
     }
 
 

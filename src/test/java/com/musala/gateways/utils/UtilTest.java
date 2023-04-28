@@ -8,8 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UtilTest {
 
-    @Autowired
-    private Util util;
+    private final Util util = new Util();
 
     @Test
     void ipValidatingTrue() {
